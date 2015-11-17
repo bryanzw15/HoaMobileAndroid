@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#bf521c</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="primary_material_dark_hoamobile">#ef6723</color>
+    <color name="colorPrimaryDarkHoaMobile">#bf521c</color>
+    <color name="colorAccentHoaMobile">#ef6723</color>
+</resources>
