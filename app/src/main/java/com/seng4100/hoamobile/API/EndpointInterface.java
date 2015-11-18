@@ -1,6 +1,7 @@
 package com.seng4100.hoamobile.API;
 
 
+import com.seng4100.hoamobile.Model.Activities;
 import com.seng4100.hoamobile.Model.Activity;
 import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.Model.Activitybooks;
@@ -21,7 +22,7 @@ public interface EndpointInterface {
     Call<Activitybook> getActivitybook(@Path("id") int id);
 
     @GET("/activities")
-    Call<List<Activity>> getActivities();
+    Call<Activities> getActivities();
     @GET("/activities/{id}")
     Call<Activity> getActivity(@Path("id") int id);
 

@@ -1,5 +1,8 @@
 package com.seng4100.hoamobile.View;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -110,19 +113,45 @@ public class NavigationViewActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Fragment fragment = null;
+        Class fragmentClass = ActivitybookFragmentView.class;
 
-        if (id == R.id.nav_activitybooks) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        switch(id) {
+            case R.id.nav_activitybooks:
+                fragmentClass = ActivitybookFragmentView.class;
+                break;
+            case R.id.nav_activities:
+                fragmentClass = ActivityFragmentView.class;
+                break;
+            case R.id.nav_slideshow:
+                break;
+            case R.id.nav_manage:
+                break;
+            case R.id.nav_share:
+                break;
+            case R.id.nav_send:
+                break;
 
-        } else if (id == R.id.nav_manage) {
+            default:
+                fragmentClass = ActivitybookFragmentView.class;
+                break;
+        }
 
-        } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
+        if(fragment != null) {
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.frame_container, fragment);
+            //transaction.addToBackStack(null);
+            transaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

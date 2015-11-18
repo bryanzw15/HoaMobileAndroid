@@ -10,9 +10,10 @@
     tools:showIn="@layout/app_bar_navigation_view"
     tools:context="com.seng4100.hoamobile.View.NavigationViewActivity">
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello World"/>
+        android:id="@+id/frame_container" >
+    </FrameLayout>
 
 </RelativeLayout>
