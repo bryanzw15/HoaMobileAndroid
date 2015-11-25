@@ -1,29 +1,24 @@
 package com.seng4100.hoamobile.View;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.seng4100.hoamobile.API.EndpointInterface;
 import com.seng4100.hoamobile.API.ServiceGenerator;
-import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.Model.Activitybooks;
 import com.seng4100.hoamobile.R;
-
-import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;

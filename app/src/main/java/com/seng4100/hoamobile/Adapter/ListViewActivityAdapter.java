@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.seng4100.hoamobile.Model.Activity;
-import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.R;
 
 import java.util.List;
