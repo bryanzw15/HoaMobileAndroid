@@ -24,10 +24,11 @@ local.properties
 proguard/
 
 # Log Files
-.log
+*.log
 
 # Android Studio Navigation editor temp files
 .navigation/
+
 ### Gradle template
 
 # Ignore Gradle GUI config
@@ -39,6 +40,7 @@ gradlew.bat
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
 
@@ -86,6 +88,8 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
+
+
 ### OSX template
 .DS_Store
 .AppleDouble
