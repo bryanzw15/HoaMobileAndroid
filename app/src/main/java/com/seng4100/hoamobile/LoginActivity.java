@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import com.newrelic.agent.android.NewRelic;
 
 import com.seng4100.hoamobile.View.NavigationViewActivity;
 
@@ -18,6 +19,11 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         Button login = (Button) findViewById(R.id.b_login);
+
+        //Initialize New Relic
+        NewRelic.withApplicationToken(
+                "AA446ea2003e5e8a3961a56ecd087c71cb6416ea76"
+        ).start(this.getApplication());
 
 
         login.setOnClickListener(new View.OnClickListener() {
