@@ -171,7 +171,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        void onFragmentInteraction(String id);
     }
 
 }

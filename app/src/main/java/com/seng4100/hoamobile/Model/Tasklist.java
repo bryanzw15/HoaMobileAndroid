@@ -37,7 +37,7 @@ public class Tasklist {
     private Object updatedAt;
     @SerializedName("tasks")
     @Expose
-    private List<Task> tasks = new ArrayList<Task>();
+    private List<Task> tasks = new ArrayList<>();
 
     /**
      *

@@ -10,7 +10,7 @@ public class Activitybooks {
 
     @SerializedName("activitybooks")
     @Expose
-    private List<Activitybook> activitybooks = new ArrayList<Activitybook>();
+    private List<Activitybook> activitybooks = new ArrayList<>();
 
     /**
      *

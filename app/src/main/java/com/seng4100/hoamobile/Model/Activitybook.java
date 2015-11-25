@@ -25,7 +25,7 @@ public class Activitybook {
     private String updatedAt;
     @SerializedName("activities")
     @Expose
-    private List<Activity> activities = new ArrayList<Activity>();
+    private List<Activity> activities = new ArrayList<>();
 
     /**
      *

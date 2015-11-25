@@ -28,7 +28,7 @@ public class Activity {
     private Object updatedAt;
     @SerializedName("tasklists")
     @Expose
-    private List<Tasklist> tasklists = new ArrayList<Tasklist>();
+    private List<Tasklist> tasklists = new ArrayList<>();
 
     /**
      *
