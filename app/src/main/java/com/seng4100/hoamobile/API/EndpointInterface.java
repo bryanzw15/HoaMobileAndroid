@@ -11,6 +11,7 @@ import com.seng4100.hoamobile.Model.Tasklist;
 import java.util.List;
 
 import retrofit.Call;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Path;
 
@@ -23,6 +24,8 @@ public interface EndpointInterface {
     Call<List<Activitybook>> getActivitybooks();
     @GET("/activitybooks/{id}")
     Call<Activitybook> getActivitybook(@Path("id") int id);
+    @DELETE("/activitybooks/{id}")
+    void deleteActivitybook(@Path("id") int id);
 
 
 
@@ -33,6 +36,8 @@ public interface EndpointInterface {
     Call<List<Activity>> getActivities();
     @GET("/activities/{id}")
     Call<Activity> getActivity(@Path("id") int id);
+    @DELETE("/activities/{id}")
+    void deleteActivity(@Path("id") int id);
 
 
     /**
@@ -42,6 +47,8 @@ public interface EndpointInterface {
     Call<List<Tasklist>> getTasklists();
     @GET("/tasklists/{id}")
     Call<Tasklist> getTasklist(@Path("id") int id);
+    @DELETE("/tasklists/{id}")
+    void deleteTasklist(@Path("id") int id);
 
 
     /**
@@ -51,4 +58,6 @@ public interface EndpointInterface {
     Call<List<Task>> getTasks();
     @GET("/tasks/{id}")
     Call<Task> getTask(@Path("id") int id);
+    @DELETE("/tasks/{id}")
+    void deleteTask(@Path("id") int id);
 }
