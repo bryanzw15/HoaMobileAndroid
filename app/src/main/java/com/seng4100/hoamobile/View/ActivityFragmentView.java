@@ -3,6 +3,7 @@ package com.seng4100.hoamobile.View;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ import retrofit.Retrofit;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ActivityFragmentView extends Fragment implements AbsListView.OnItemClickListener {
+public class ActivityFragmentView extends Fragment implements AbsListView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,6 +50,11 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
      * The fragment's ListView/GridView.
      */
     private AbsListView mListView;
+
+    /**
+     * The fragment's Scroll Down Swipe Layout
+     */
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
@@ -82,25 +88,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
-        Log.d("Sal2:", mParam1);
-        Call<Activitybook> call = endpoint.getActivitybook(Integer.parseInt(mParam1));
-        call.enqueue(new Callback<Activitybook>() {
-            @Override
-            public void onResponse(Response<Activitybook> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    mAdapter = new ListViewActivityAdapter(getActivity(), response.body().getActivities());
-                    mListView.setAdapter(mAdapter);
-                    Log.d("Success", response.raw().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("Error", t.getMessage());
-            }
-        });
-
+        getContent(mParam1);
 
         // TODO: Change Adapter to display your content
     }
@@ -110,6 +98,8 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
@@ -118,6 +108,19 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
         mListView.setOnItemClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getContent(mParam1);
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
     }
 
     public void onAttach(Context context) {
@@ -171,6 +174,27 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String id, String requestClass);
+    }
+
+
+    private void getContent(String mParam1){
+        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
+        Call<Activitybook> call = endpoint.getActivitybook(Integer.parseInt(mParam1));
+        call.enqueue(new Callback<Activitybook>() {
+            @Override
+            public void onResponse(Response<Activitybook> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    mAdapter = new ListViewActivityAdapter(getActivity(), response.body().getActivities());
+                    mListView.setAdapter(mAdapter);
+                    Log.d("Success", response.raw().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
     }
 
 }

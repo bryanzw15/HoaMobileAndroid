@@ -3,6 +3,7 @@ package com.seng4100.hoamobile.View;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ import retrofit.Retrofit;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ActivitybookFragmentView extends Fragment implements AbsListView.OnItemClickListener {
+public class ActivitybookFragmentView extends Fragment implements AbsListView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,6 +51,11 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
      * The fragment's ListView/GridView.
      */
     private AbsListView mListView;
+
+    /**
+     * The fragment's Scroll Down Swipe Layout
+     */
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
@@ -83,23 +89,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
-        Call<List<Activitybook>> call = endpoint.getActivitybooks();
-        call.enqueue(new Callback<List<Activitybook>>() {
-            @Override
-            public void onResponse(Response<List<Activitybook>> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    mAdapter = new ListViewActivitybookAdapter(getActivity(), response.body());
-                    mListView.setAdapter(mAdapter);
-                    Log.d("Success", "" + response.raw());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("Error", t.getMessage());
-            }
-        });
+        getContent();
 
         // TODO: Change Adapter to display your content
     }
@@ -109,6 +99,8 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activitybook, container, false);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
@@ -117,6 +109,19 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         mListView.setOnItemClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getContent();
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -141,7 +146,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(((Activitybook)parent.getItemAtPosition(position)).getId(), "Activity");
+            mListener.onFragmentInteraction(((Activitybook) parent.getItemAtPosition(position)).getId(), "Activity");
         }
     }
 
@@ -158,6 +163,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         }
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -171,6 +177,26 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String id, String requestClass);
+    }
+
+    private void getContent(){
+        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
+        Call<List<Activitybook>> call = endpoint.getActivitybooks();
+        call.enqueue(new Callback<List<Activitybook>>() {
+            @Override
+            public void onResponse(Response<List<Activitybook>> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    mAdapter = new ListViewActivitybookAdapter(getActivity(), response.body());
+                    mListView.setAdapter(mAdapter);
+                    Log.d("Success", "" + response.raw());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
     }
 
 }

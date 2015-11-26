@@ -2,11 +2,11 @@ package com.seng4100.hoamobile.View;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -36,7 +36,7 @@ import retrofit.Retrofit;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class TasklistFragmentView extends Fragment implements ExpandableListView.OnItemClickListener {
+public class TasklistFragmentView extends Fragment implements ExpandableListView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +53,11 @@ public class TasklistFragmentView extends Fragment implements ExpandableListView
      * The fragment's ListView/GridView.
      */
     private ExpandableListView mListView;
+
+    /**
+     * The fragment's Scroll Down Swipe Layout
+     */
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
@@ -86,25 +91,7 @@ public class TasklistFragmentView extends Fragment implements ExpandableListView
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
-        Call<Activity> call = endpoint.getActivity(Integer.parseInt(mParam1));
-        call.enqueue(new Callback<Activity>() {
-            @Override
-            public void onResponse(Response<Activity> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    mAdapter = new ExpandbleListViewTasklistAdapter(getActivity(), appendTasks(response.body().getTasklists()));
-                    mListView.setAdapter(mAdapter);
-                    Log.d("Success", response.raw().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("Error", t.getMessage());
-            }
-        });
-
-
+        getContent(mParam1);
         // TODO: Change Adapter to display your content
     }
 
@@ -113,6 +100,8 @@ public class TasklistFragmentView extends Fragment implements ExpandableListView
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_taskilist_explist, container, false);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         // Set the adapter
         mListView = (ExpandableListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
@@ -122,6 +111,20 @@ public class TasklistFragmentView extends Fragment implements ExpandableListView
 
         return view;
     }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getContent(mParam1);
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }
+
 
 /*    @Override
     public void onAttach(Activity activity) {
@@ -175,6 +178,26 @@ public class TasklistFragmentView extends Fragment implements ExpandableListView
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String id, String requestClass);
+    }
+
+    public void getContent(String mParam1){
+        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
+        Call<Activity> call = endpoint.getActivity(Integer.parseInt(mParam1));
+        call.enqueue(new Callback<Activity>() {
+            @Override
+            public void onResponse(Response<Activity> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    mAdapter = new ExpandbleListViewTasklistAdapter(getActivity(), appendTasks(response.body().getTasklists()));
+                    mListView.setAdapter(mAdapter);
+                    Log.d("Success", response.raw().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
     }
 
 
