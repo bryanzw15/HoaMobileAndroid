@@ -17,8 +17,11 @@ import android.view.View;
 
 import com.seng4100.hoamobile.API.EndpointInterface;
 import com.seng4100.hoamobile.API.ServiceGenerator;
+import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.Model.Activitybooks;
 import com.seng4100.hoamobile.R;
+
+import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -26,7 +29,9 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class NavigationViewActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+            ActivitybookFragmentView.OnFragmentInteractionListener,
+            ActivityFragmentView.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,23 +40,6 @@ public class NavigationViewActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
-        Call<Activitybooks> call = endpoint.getActivitybooks();
-        call.enqueue(new Callback<Activitybooks>() {
-            @Override
-            public void onResponse(Response<Activitybooks> response, Retrofit retrofit) {
-                if(response.isSuccess()) {
-                    Log.d("BryanSuccess", response.body().getActivitybooks().get(0).getName());
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("BryanError", t.getMessage());
-            }
-        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -145,12 +133,44 @@ public class NavigationViewActivity extends AppCompatActivity
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
             transaction.replace(R.id.frame_container, fragment);
-            //transaction.addToBackStack(null);
+            transaction.addToBackStack(fragment.getTag());
             transaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(String id, String requestClass) {
+
+        Fragment fragment;
+
+        Class fragmentClass = ActivitybookFragmentView.class;
+        //Get the specific fragment from that is passing the data
+
+        switch(requestClass) {
+            case "Activitybook":
+                fragment = ActivitybookFragmentView.newInstance(id, requestClass);
+                break;
+            case "Activity":
+                fragment = ActivityFragmentView.newInstance(id, requestClass);
+                break;
+
+            default:
+                fragment = ActivitybookFragmentView.newInstance(id, requestClass);
+                break;
+        }
+
+
+        if(fragment != null) {
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack(fragment.getTag());
+            transaction.commit();
+        }
     }
 }

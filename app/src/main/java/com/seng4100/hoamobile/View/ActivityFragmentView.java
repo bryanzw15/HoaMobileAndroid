@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.seng4100.hoamobile.API.EndpointInterface;
 import com.seng4100.hoamobile.API.ServiceGenerator;
 import com.seng4100.hoamobile.Adapter.ListViewActivityAdapter;
 import com.seng4100.hoamobile.Model.Activities;
+import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.R;
 import com.seng4100.hoamobile.View.dummy.DummyContent;
 
@@ -82,22 +84,20 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
         }
 
         EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
-        Call<Activities> call = endpoint.getActivities();
-        call.enqueue(new Callback<Activities>() {
+        Call<Activitybook> call = endpoint.getActivitybook(Integer.parseInt(mParam1));
+        call.enqueue(new Callback<Activitybook>() {
             @Override
-            public void onResponse(Response<Activities> response, Retrofit retrofit) {
+            public void onResponse(Response<Activitybook> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     mAdapter = new ListViewActivityAdapter(getActivity(), response.body().getActivities());
                     mListView.setAdapter(mAdapter);
-                    Log.d("BryanSuccess", response.body().getActivities().get(0).getName());
-                } else {
-
+                    Log.d("Success", response.raw().toString());
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d("BryanError", t.getMessage());
+                Log.d("Error", t.getMessage());
             }
         });
 
@@ -112,7 +112,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        //((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -142,7 +142,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id, "Tasklist");
         }
     }
 
@@ -171,7 +171,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String id);
+        void onFragmentInteraction(String id, String requestClass);
     }
 
 }

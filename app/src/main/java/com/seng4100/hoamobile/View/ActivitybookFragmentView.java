@@ -1,6 +1,7 @@
 package com.seng4100.hoamobile.View;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +14,12 @@ import android.widget.TextView;
 import com.seng4100.hoamobile.API.EndpointInterface;
 import com.seng4100.hoamobile.API.ServiceGenerator;
 import com.seng4100.hoamobile.Adapter.ListViewActivitybookAdapter;
+import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.Model.Activitybooks;
 import com.seng4100.hoamobile.R;
 import com.seng4100.hoamobile.View.dummy.DummyContent;
+
+import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -82,22 +86,20 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         }
 
         EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
-        Call<Activitybooks> call = endpoint.getActivitybooks();
-        call.enqueue(new Callback<Activitybooks>() {
+        Call<List<Activitybook>> call = endpoint.getActivitybooks();
+        call.enqueue(new Callback<List<Activitybook>>() {
             @Override
-            public void onResponse(Response<Activitybooks> response, Retrofit retrofit) {
+            public void onResponse(Response<List<Activitybook>> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    mAdapter = new ListViewActivitybookAdapter(getActivity(), response.body().getActivitybooks());
+                    mAdapter = new ListViewActivitybookAdapter(getActivity(), response.body());
                     mListView.setAdapter(mAdapter);
-                    Log.d("BryanSuccess", response.body().getActivitybooks().get(0).getName());
-                } else {
-
+                    Log.d("Success", "" + response.raw());
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d("BryanError", t.getMessage());
+                Log.d("Error", t.getMessage());
             }
         });
 
@@ -111,25 +113,24 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        /*ListViewActivitybookAdapter listViewActivitybookAdapter
-                ((AdapterView<ListViewActivitybookAdapter>) mListView).setAdapter(mAdapter);
-*/
+        mListView.setAdapter(mAdapter);
+
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
         return view;
     }
 
-    /*@Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }*/
+    }
 
     @Override
     public void onDetach() {
@@ -142,7 +143,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(((Activitybook)parent.getItemAtPosition(position)).getId(), "Activity");
         }
     }
 
@@ -171,7 +172,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String id);
+        void onFragmentInteraction(String id, String requestClass);
     }
 
 }
