@@ -31,7 +31,8 @@ import retrofit.Retrofit;
 public class NavigationViewActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
             ActivitybookFragmentView.OnFragmentInteractionListener,
-            ActivityFragmentView.OnFragmentInteractionListener {
+            ActivityFragmentView.OnFragmentInteractionListener,
+            TasklistFragmentView.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +145,7 @@ public class NavigationViewActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(String id, String requestClass) {
-
+        Log.d("Sal2:", "id: " + id + " requestClass: " + requestClass);
         Fragment fragment;
 
         Class fragmentClass = ActivitybookFragmentView.class;
@@ -157,7 +158,9 @@ public class NavigationViewActivity extends AppCompatActivity
             case "Activity":
                 fragment = ActivityFragmentView.newInstance(id, requestClass);
                 break;
-
+            case "Tasklist":
+                fragment = TasklistFragmentView.newInstance(id, requestClass);
+                break;
             default:
                 fragment = ActivitybookFragmentView.newInstance(id, requestClass);
                 break;

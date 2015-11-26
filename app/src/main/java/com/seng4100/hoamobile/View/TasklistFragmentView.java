@@ -1,7 +1,6 @@
 package com.seng4100.hoamobile.View;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,13 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.seng4100.hoamobile.API.EndpointInterface;
 import com.seng4100.hoamobile.API.ServiceGenerator;
-import com.seng4100.hoamobile.Adapter.ListViewActivitybookAdapter;
-import com.seng4100.hoamobile.Model.Activitybook;
+import com.seng4100.hoamobile.Adapter.ExpandbleListViewTasklistAdapter;
+import com.seng4100.hoamobile.Model.Activity;
+import com.seng4100.hoamobile.Model.Task;
+import com.seng4100.hoamobile.Model.Tasklist;
 import com.seng4100.hoamobile.R;
+
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ import retrofit.Retrofit;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ActivitybookFragmentView extends Fragment implements AbsListView.OnItemClickListener {
+public class TasklistFragmentView extends Fragment implements ExpandableListView.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,17 +52,17 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private ExpandableListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListViewActivitybookAdapter mAdapter;
+    private ExpandbleListViewTasklistAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static ActivitybookFragmentView newInstance(String param1, String param2) {
-        ActivitybookFragmentView fragment = new ActivitybookFragmentView();
+    public static TasklistFragmentView newInstance(String param1, String param2) {
+        TasklistFragmentView fragment = new TasklistFragmentView();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,7 +74,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ActivitybookFragmentView() {
+    public TasklistFragmentView() {
     }
 
     @Override
@@ -84,14 +87,14 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         }
 
         EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
-        Call<List<Activitybook>> call = endpoint.getActivitybooks();
-        call.enqueue(new Callback<List<Activitybook>>() {
+        Call<Activity> call = endpoint.getActivity(Integer.parseInt(mParam1));
+        call.enqueue(new Callback<Activity>() {
             @Override
-            public void onResponse(Response<List<Activitybook>> response, Retrofit retrofit) {
+            public void onResponse(Response<Activity> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    mAdapter = new ListViewActivitybookAdapter(getActivity(), response.body());
+                    mAdapter = new ExpandbleListViewTasklistAdapter(getActivity(), appendTasks(response.body().getTasklists()));
                     mListView.setAdapter(mAdapter);
-                    Log.d("Success", "" + response.raw());
+                    Log.d("Success", response.raw().toString());
                 }
             }
 
@@ -101,16 +104,17 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
             }
         });
 
+
         // TODO: Change Adapter to display your content
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_activitybook, container, false);
+        View view = inflater.inflate(R.layout.fragment_taskilist_explist, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        mListView = (ExpandableListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
@@ -119,17 +123,17 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+/*    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) context;
+            mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
+            throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+*/
     @Override
     public void onDetach() {
         super.onDetach();
@@ -141,7 +145,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(((Activitybook)parent.getItemAtPosition(position)).getId(), "Activity");
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id, "Tasklist");
         }
     }
 
@@ -173,4 +177,32 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         void onFragmentInteraction(String id, String requestClass);
     }
 
+
+    public List<Tasklist> appendTasks(final List<Tasklist> tasklists){
+        List<Task> tasks;
+        for (int i = 0; i < tasklists.size(); i++){
+
+            final int position = i;
+
+            EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
+            Call<Tasklist> call = endpoint.getTasklist(Integer.parseInt(tasklists.get(i).getId()));
+            call.enqueue(new Callback<Tasklist>() {
+                @Override
+                public void onResponse(Response<Tasklist> response, Retrofit retrofit) {
+                    if (response.isSuccess()) {
+                        tasklists.get(position).setTasks(response.body().getTasks());
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.d("Error", t.getMessage());
+                }
+            });
+
+
+        }
+
+        return tasklists;
+    }
 }

@@ -1,6 +1,7 @@
 package com.seng4100.hoamobile.View;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,16 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.seng4100.hoamobile.API.EndpointInterface;
 import com.seng4100.hoamobile.API.ServiceGenerator;
 import com.seng4100.hoamobile.Adapter.ListViewActivityAdapter;
-import com.seng4100.hoamobile.Model.Activities;
+import com.seng4100.hoamobile.Model.Activity;
 import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.R;
-import com.seng4100.hoamobile.View.dummy.DummyContent;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -84,6 +83,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
         }
 
         EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
+        Log.d("Sal2:", mParam1);
         Call<Activitybook> call = endpoint.getActivitybook(Integer.parseInt(mParam1));
         call.enqueue(new Callback<Activitybook>() {
             @Override
@@ -120,17 +120,16 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
         return view;
     }
 
-/*    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnFragmentInteractionListener) getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
-*/
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -142,7 +141,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id, "Tasklist");
+            mListener.onFragmentInteraction(((Activity) parent.getItemAtPosition(position)).getId(), "Tasklist");
         }
     }
 
