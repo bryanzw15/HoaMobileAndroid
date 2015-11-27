@@ -3,6 +3,7 @@ package com.seng4100.hoamobile.View;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.seng4100.hoamobile.API.EndpointInterface;
 import com.seng4100.hoamobile.API.ServiceGenerator;
 import com.seng4100.hoamobile.Adapter.ListViewActivityAdapter;
@@ -49,7 +52,7 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private DynamicListView mListView;
 
     /**
      * The fragment's Scroll Down Swipe Layout
@@ -101,11 +104,21 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        mListView = (DynamicListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        mListView.enableSwipeToDismiss(new OnDismissCallback() {
+            @Override
+            public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+                for (int position : reverseSortedPositions) {
+                    String id = (mAdapter.getItem(position)).getId();
+                    deleteContent(Integer.parseInt(id));
+                }
+            }
+        });
 
         return view;
     }
@@ -192,6 +205,24 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
 
             @Override
             public void onFailure(Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+
+    private void deleteContent(int id){
+        EndpointInterface endpoint = ServiceGenerator.createService(EndpointInterface.class);
+        Call<String> call = endpoint.deleteActivity(id);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Response<String> response, Retrofit retrofit) {
+                getContent(mParam1);
+                Log.d("Success", "" + response.raw());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                getContent(mParam1);
                 Log.d("Error", t.getMessage());
             }
         });

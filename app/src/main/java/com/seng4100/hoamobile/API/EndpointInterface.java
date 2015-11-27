@@ -1,10 +1,7 @@
 package com.seng4100.hoamobile.API;
 
-
-import com.seng4100.hoamobile.Model.Activities;
 import com.seng4100.hoamobile.Model.Activity;
 import com.seng4100.hoamobile.Model.Activitybook;
-import com.seng4100.hoamobile.Model.Activitybooks;
 import com.seng4100.hoamobile.Model.Task;
 import com.seng4100.hoamobile.Model.Tasklist;
 
@@ -25,7 +22,7 @@ public interface EndpointInterface {
     @GET("/activitybooks/{id}")
     Call<Activitybook> getActivitybook(@Path("id") int id);
     @DELETE("/activitybooks/{id}")
-    void deleteActivitybook(@Path("id") int id);
+    Call<String> deleteActivitybook(@Path("id") int id);
 
 
 
@@ -37,7 +34,7 @@ public interface EndpointInterface {
     @GET("/activities/{id}")
     Call<Activity> getActivity(@Path("id") int id);
     @DELETE("/activities/{id}")
-    void deleteActivity(@Path("id") int id);
+    Call<String> deleteActivity(@Path("id") int id);
 
 
     /**
@@ -48,7 +45,7 @@ public interface EndpointInterface {
     @GET("/tasklists/{id}")
     Call<Tasklist> getTasklist(@Path("id") int id);
     @DELETE("/tasklists/{id}")
-    void deleteTasklist(@Path("id") int id);
+    Call<String> deleteTasklist(@Path("id") int id);
 
 
     /**
@@ -59,5 +56,5 @@ public interface EndpointInterface {
     @GET("/tasks/{id}")
     Call<Task> getTask(@Path("id") int id);
     @DELETE("/tasks/{id}")
-    void deleteTask(@Path("id") int id);
+    Call<String> deleteTask(@Path("id") int id);
 }
