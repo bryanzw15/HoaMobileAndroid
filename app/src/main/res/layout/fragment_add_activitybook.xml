@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/add_activitybook_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Activitybook Name"
+        android:singleLine="true"/>
+
+    <RadioGroup
+        android:id="@+id/active_radiogroup"
+        android:layout_below="@id/add_activitybook_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/active_radiobutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active"/>
+        <RadioButton
+            android:id="@+id/inactive_radiobutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inactive"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_below="@id/active_radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"/>
+</RelativeLayout>

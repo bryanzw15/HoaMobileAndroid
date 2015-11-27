@@ -206,6 +206,10 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
                     mAdapter = new ListViewActivitybookAdapter(getActivity(), response.body());
                     //mAdapter.setAbsListView(mListView);
                     mListView.setAdapter(mAdapter);
+
+                    if(mAdapter.getCount() == 0){
+                        setEmptyText("You don't have any activitybook. Add some of them!");
+                    }
                     Log.d("Success", "" + response.raw());
                 }
             }

@@ -189,6 +189,11 @@ public class TasklistFragmentView extends Fragment implements ExpandableListView
                 if (response.isSuccess()) {
                     mAdapter = new ExpandbleListViewTasklistAdapter(getActivity(), appendTasks(response.body().getTasklists()));
                     mListView.setAdapter(mAdapter);
+
+                    if(mAdapter.getGroupCount() == 0){
+                        setEmptyText("You don't have any tasklist/task. Add some of them!");
+                    }
+
                     Log.d("Success", response.raw().toString());
                 }
             }

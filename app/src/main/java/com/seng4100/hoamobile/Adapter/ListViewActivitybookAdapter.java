@@ -14,6 +14,8 @@ import java.util.List;
 
 public class ListViewActivitybookAdapter extends ArrayAdapter<Activitybook> {
 
+    List<Activitybook> activitybooks;
+
     static class ViewHolder {
         TextView title;
         TextView date;
@@ -23,6 +25,8 @@ public class ListViewActivitybookAdapter extends ArrayAdapter<Activitybook> {
 
     public ListViewActivitybookAdapter(Context context, List<Activitybook> items) {
         super(context, R.layout.list_view_activitybook_adapter, items);
+
+        activitybooks = items;
     }
 
     @Override
@@ -50,5 +54,10 @@ public class ListViewActivitybookAdapter extends ArrayAdapter<Activitybook> {
             viewHolder.active.setText("Inactive");
 
         return convertView;
+    }
+
+    @Override
+    public int getCount(){
+        return activitybooks.size();
     }
 }

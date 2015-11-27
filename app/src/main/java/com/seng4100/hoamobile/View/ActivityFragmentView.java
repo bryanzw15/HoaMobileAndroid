@@ -199,6 +199,10 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
                 if (response.isSuccess()) {
                     mAdapter = new ListViewActivityAdapter(getActivity(), response.body().getActivities());
                     mListView.setAdapter(mAdapter);
+
+                    if(mAdapter.getCount() == 0){
+                        setEmptyText("You don't have any activity. Add some of them!");
+                    }
                     Log.d("Success", response.raw().toString());
                 }
             }

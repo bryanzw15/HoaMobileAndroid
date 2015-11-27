@@ -8,8 +8,10 @@ import com.seng4100.hoamobile.Model.Tasklist;
 import java.util.List;
 
 import retrofit.Call;
+import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Path;
 
 public interface EndpointInterface {
@@ -23,6 +25,8 @@ public interface EndpointInterface {
     Call<Activitybook> getActivitybook(@Path("id") int id);
     @DELETE("/activitybooks/{id}")
     Call<String> deleteActivitybook(@Path("id") int id);
+    @POST("/activitybooks")
+    Call<Activitybook> createActivityBook(@Body Activitybook activitybook);
 
 
 

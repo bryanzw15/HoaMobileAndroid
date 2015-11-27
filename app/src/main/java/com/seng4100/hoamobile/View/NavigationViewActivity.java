@@ -108,7 +108,8 @@ public class NavigationViewActivity extends AppCompatActivity
             case R.id.nav_activities:
                 fragmentClass = ActivityFragmentView.class;
                 break;
-            case R.id.nav_slideshow:
+            case R.id.nav_addActivity:
+                fragmentClass = AddActivitybookViewFragment.class;
                 break;
             case R.id.nav_manage:
                 break;

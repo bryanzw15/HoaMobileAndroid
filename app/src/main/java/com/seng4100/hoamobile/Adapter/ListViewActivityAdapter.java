@@ -14,6 +14,9 @@ import com.seng4100.hoamobile.R;
 import java.util.List;
 
 public class ListViewActivityAdapter extends ArrayAdapter<Activity> {
+
+    List<Activity> activities;
+
     static class ViewHolder {
         TextView title;
         TextView activitybookId;
@@ -23,6 +26,8 @@ public class ListViewActivityAdapter extends ArrayAdapter<Activity> {
 
     public ListViewActivityAdapter(Context context, List<Activity> items) {
         super(context, R.layout.list_view_activity_adapter, items);
+
+        activities = items;
     }
 
     @Override
@@ -55,5 +60,10 @@ public class ListViewActivityAdapter extends ArrayAdapter<Activity> {
         } else
             viewHolder.activitybookId.setText("Activitybook ID: Unknown");
         return convertView;
+    }
+
+    @Override
+    public int getCount(){
+        return activities.size();
     }
 }
