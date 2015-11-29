@@ -23,13 +23,25 @@
         android:hint="Username"
         android:layout_above="@id/ed2"/>
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ed2"
-        android:layout_centerHorizontal="true"
+        android:text="Register"
+        android:background="@drawable/buttonstyle"
+        android:id="@+id/b_register"
+        android:layout_below="@+id/ed2"
+        android:layout_toEndOf="@+id/b_login"
+        android:layout_marginStart="55dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Log In"
         android:id="@+id/b_login"
-        android:background="@drawable/buttonstyle"/>
+        android:background="@drawable/buttonstyle"
+        android:layout_marginStart="58dp"
+        android:layout_alignTop="@+id/b_register"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

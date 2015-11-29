@@ -93,7 +93,6 @@ public class ActivityFragmentView extends Fragment implements AbsListView.OnItem
 
         getContent(mParam1);
 
-        // TODO: Change Adapter to display your content
     }
 
     @Override
