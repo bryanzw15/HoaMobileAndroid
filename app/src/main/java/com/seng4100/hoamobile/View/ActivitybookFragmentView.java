@@ -110,10 +110,12 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         mSwipeRefreshLayout.setOnRefreshListener(this);
         // Set the adapter
         mListView = (DynamicListView) view.findViewById(android.R.id.list);
-        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        mListView.setAdapter(mAdapter);
+
 
         mListView.enableSwipeToDismiss(new OnDismissCallback() {
             @Override
@@ -163,6 +165,7 @@ public class ActivitybookFragmentView extends Fragment implements AbsListView.On
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
+            Log.d("sal", "" + id);
             mListener.onFragmentInteraction(((Activitybook) parent.getItemAtPosition(position)).getId(), "Activity");
         }
     }

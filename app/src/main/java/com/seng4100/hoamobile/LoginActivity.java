@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.newrelic.agent.android.NewRelic;
 
 import com.seng4100.hoamobile.View.NavigationViewActivity;
+import com.seng4100.hoamobile.View.RegisterUserViewActivity;
 
 public class LoginActivity extends Activity {
 
@@ -19,6 +20,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         Button login = (Button) findViewById(R.id.b_login);
+        Button register = (Button) findViewById(R.id.b_register);
 
         //Initialize New Relic
         NewRelic.withApplicationToken(
@@ -30,6 +32,15 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), NavigationViewActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), RegisterUserViewActivity.class);
                 startActivity(i);
                 finish();
             }

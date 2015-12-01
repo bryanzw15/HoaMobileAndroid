@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
     tools:context="com.seng4100.hoamobile.View.NavigationViewActivity">
@@ -17,9 +18,57 @@
 
     <include layout="@layout/content_navigation_view" />
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+    <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        fab:fab_addButtonColorNormal="#EF6723"
+        fab:fab_addButtonColorPressed="#F2854F"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left"
+        fab:fab_addButtonPlusIconColor="#FFF">
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNewTask"
+            android:tag="newTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#EF6723"
+            fab:fab_size="mini"
+            fab:fab_title="Add Task"
+            fab:fab_colorPressed="#F2854F"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNewTasklist"
+            android:tag="newTasklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#EF6723"
+            fab:fab_size="mini"
+            fab:fab_title="Add Tasklist"
+            fab:fab_colorPressed="#F2854F"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNewActivity"
+            android:tag="newActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#EF6723"
+            fab:fab_size="mini"
+            fab:fab_title="Add Activity"
+            fab:fab_colorPressed="#F2854F"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNewActivitybook"
+            android:tag="newActivityBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#EF6723"
+            fab:fab_size="mini"
+            fab:fab_title="Add Activitybook"
+            fab:fab_colorPressed="#F2854F"
+            fab:fab_icon="@android:drawable/ic_menu_sort_by_size"/>
+
+    </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>

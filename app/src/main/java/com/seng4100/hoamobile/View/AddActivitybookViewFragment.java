@@ -50,9 +50,6 @@ public class AddActivitybookViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
 
-
-
-
     }
 
     @Override

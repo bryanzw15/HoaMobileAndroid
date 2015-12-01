@@ -4,6 +4,7 @@ import com.seng4100.hoamobile.Model.Activity;
 import com.seng4100.hoamobile.Model.Activitybook;
 import com.seng4100.hoamobile.Model.Task;
 import com.seng4100.hoamobile.Model.Tasklist;
+import com.seng4100.hoamobile.Model.User;
 
 import java.util.List;
 
@@ -39,6 +40,8 @@ public interface EndpointInterface {
     Call<Activity> getActivity(@Path("id") int id);
     @DELETE("/activities/{id}")
     Call<String> deleteActivity(@Path("id") int id);
+    @POST("/activities")
+    Call<Activity> createActivity(@Body Activity activity);
 
 
     /**
@@ -50,6 +53,8 @@ public interface EndpointInterface {
     Call<Tasklist> getTasklist(@Path("id") int id);
     @DELETE("/tasklists/{id}")
     Call<String> deleteTasklist(@Path("id") int id);
+    @POST("/tasklists")
+    Call<Tasklist> createTasklist(@Body Tasklist tasklist);
 
 
     /**
@@ -61,4 +66,13 @@ public interface EndpointInterface {
     Call<Task> getTask(@Path("id") int id);
     @DELETE("/tasks/{id}")
     Call<String> deleteTask(@Path("id") int id);
+    @POST("/tasks")
+    Call<Task> createTask(@Body Task task);
+
+    /**
+     * Users
+     */
+    @POST("/users")
+    Call<User> createUser(@Body User user);
+
 }
